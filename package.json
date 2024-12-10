@@ -1,0 +1,16 @@
+{
+  "name": "board-widget-cdn",
+  "version": "1.0.0",
+  "description": "Blog board widget for websites",
+  "main": "src/board.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuny12345/board-widget-cdn.git"
+  },
+  "keywords": ["blog", "widget", "board"],
+  "author": "Your Name",
+  "license": "MIT"
+}
