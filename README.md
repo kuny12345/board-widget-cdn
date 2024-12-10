@@ -24,8 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/gh/your-username/your-repo@main/board.js"></script>
 </body>
-</html>
-2.2. 설정 변경
+</html>2.2. 설정 변경
 1. BOARD_CONFIG 객체의 값들을 수정하세요:
 id: 관리자에게 발급받은 게시판 ID (필수)
 siteName: 귀하의 사이트 이름 (선택)

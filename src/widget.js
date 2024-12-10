@@ -189,6 +189,9 @@ const boardFunctions = {
 
     async loadPosts(page = 1) {
         try {
+            // SEO 메타 태그 업데이트 (목록 페이지용)
+            await seoFunctions.updateMetaTags();
+
             // 전체 게시글 수 조회
             const countResult = await supabaseClient
                 .from('posting_history')
@@ -301,6 +304,9 @@ const viewFunctions = {
 
             if (error) throw error;
 
+            // SEO 메타 태그 업데이트
+            await seoFunctions.updateMetaTags(post);
+
             const postContent = document.getElementById('postContent');
             postContent.innerHTML = `
                 <a href="board.html" class="back-button">← 목록으로</a>
@@ -328,6 +334,56 @@ const viewFunctions = {
                 `).join('')}
             </div>
         `;
+    }
+};
+
+// SEO 관련 메타 태그 생성 함수 추가
+const seoFunctions = {
+    async updateMetaTags(postData = null) {
+        // 기본 메타 태그 설정
+        const defaultMeta = {
+            title: `${config.siteName} 블로그`,
+            description: '맛있는 이야기가 가득한 공간',
+            image: 'https://placehold.co/1200x630', // 기본 OG 이미지
+            url: window.location.href
+        };
+
+        // 상세 페이지인 경우 게시글 데이터로 메타 태그 업데이트
+        const meta = postData ? {
+            title: `${postData.title} - ${config.siteName}`,
+            description: postData.content.substring(0, 150).replace(/\n/g, ' '),
+            image: postData.image_urls?.[0] || defaultMeta.image,
+            url: window.location.href
+        } : defaultMeta;
+
+        // title 태그 업데이트
+        document.title = meta.title;
+
+        // 기존 메타 태그 제거
+        document.querySelectorAll('meta[data-dynamic="true"]').forEach(tag => tag.remove());
+
+        // 새로운 메타 태그 생성
+        const metaTags = [
+            { name: 'description', content: meta.description },
+            { property: 'og:title', content: meta.title },
+            { property: 'og:description', content: meta.description },
+            { property: 'og:image', content: meta.image },
+            { property: 'og:url', content: meta.url },
+            { property: 'og:type', content: 'article' },
+            { name: 'twitter:card', content: 'summary_large_image' },
+            { name: 'twitter:title', content: meta.title },
+            { name: 'twitter:description', content: meta.description },
+            { name: 'twitter:image', content: meta.image }
+        ];
+
+        metaTags.forEach(tag => {
+            const metaTag = document.createElement('meta');
+            metaTag.dataset.dynamic = 'true';
+            if (tag.name) metaTag.name = tag.name;
+            if (tag.property) metaTag.setAttribute('property', tag.property);
+            metaTag.content = tag.content;
+            document.head.appendChild(metaTag);
+        });
     }
 };
 
