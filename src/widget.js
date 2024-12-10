@@ -338,4 +338,4 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         boardFunctions.loadPosts(1);
     }
-});
+}); 
