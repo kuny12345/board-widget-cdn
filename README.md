@@ -62,3 +62,20 @@ v1.0.0 (2024-03-xx): 최초 배포
 v1.0.1 (2024-03-xx): 버그 수정 및 성능 개선
 ---
 더 자세한 정보나 도움이 필요하시다면 언제든 문의해 주세요
+
+
+7. 업데이트 방법
+# 1. 코드 수정 후 커밋
+git add .
+git commit -m "Update: [변경내용]"
+
+# 2. 새 버전 태그 생성
+git tag v1.0.1
+
+# 3. 변경사항 푸시
+git push origin main
+git push origin v1.0.1
+그리고 board.html의 스크립트 URL을 새 버전으로 업데이트:
+<script src="https://cdn.jsdelivr.net/gh/[your-username]/board-widget-cdn@v1.0.1/src/board.js"></script>캐시 관리
+jsDelivr는 자동으로 캐시를 관리하지만, 즉시 변경사항을 반영하고 싶다면 URL에 버전 파라미터를 추가:
+<script src="https://cdn.jsdelivr.net/gh/[your-username]/board-widget-cdn@v1.0.0/src/board.js?v=123"></script>
