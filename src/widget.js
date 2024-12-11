@@ -99,9 +99,23 @@ const boardStyles = `
 // 상세 페이지 스타일
 const viewStyles = `
     .post-content {
-        line-height: 1.6;
+        line-height: 1.8;
         color: #333;
         font-size: 1.1rem;
+        max-width: 800px;
+        margin: 0 auto;
+        word-break: keep-all;
+    }
+
+    .post-content h3 {
+        margin-top: 40px;
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 1.4rem;
+    }
+
+    .post-content p {
+        margin-bottom: 20px;
     }
 
     .post-meta {
@@ -189,7 +203,7 @@ const boardFunctions = {
 
     async loadPosts(page = 1) {
         try {
-            // 전체 게시글 수 조회
+            // 전체 게시글 수 ��회
             const countResult = await supabaseClient
                 .from('posting_history')
                 .select('*', { count: 'exact' })
@@ -302,6 +316,20 @@ const viewFunctions = {
             if (error) throw error;
 
             const postContent = document.getElementById('postContent');
+            
+            // 게시글 내용을 줄바꿈 단위로 분리하여 처리
+            const formattedContent = post.content
+                .split('\n\n')  // 빈 줄을 기준으로 분리
+                .map(paragraph => {
+                    // h3 태그로 시작하는 경우 그대로 반환
+                    if (paragraph.startsWith('###')) {
+                        return paragraph;
+                    }
+                    // 일반 텍스트는 p 태그로 감싸기
+                    return `<p>${paragraph.trim()}</p>`;
+                })
+                .join('\n');
+
             postContent.innerHTML = `
                 <a href="board.html" class="back-button">← 목록으로</a>
                 <h1>${post.title}</h1>
@@ -309,7 +337,7 @@ const viewFunctions = {
                     <span>${new Date(post.posted_at).toLocaleDateString()}</span>
                 </div>
                 <div class="post-content">
-                    ${post.content}
+                    ${formattedContent}
                 </div>
                 ${post.image_urls ? this.renderImages(post.image_urls) : ''}
             `;
